@@ -94,10 +94,11 @@ public class UserController {
     		Error error=new Error(5,"Unauthorized User!!");
     		return new ResponseEntity<Error>(error,HttpStatus.UNAUTHORIZED);
     	}
-    	if(userDetailsDAO.getUserDetailsByEmail(userDetails.getEmail())!=null){
-    		Error error=new Error(3,"Email address already exists!!");
-    		return new ResponseEntity<Error>(error,HttpStatus.NOT_ACCEPTABLE);
-    	}
+		if(!userDetailsDAO.getUserDetails(userDetails.getUsername()).getEmail().equals(userDetails.getEmail()))
+			if(userDetailsDAO.getUserDetailsByEmail(userDetails.getEmail())!=null){
+				Error error=new Error(3,"Email address already exists!!");
+				return new ResponseEntity<Error>(error,HttpStatus.NOT_ACCEPTABLE);
+			}
 		try{
     	userDetails.setOnline_status(true);
     	userDetailsDAO.insertOrUpdateUserDetails(userDetails);

@@ -2,7 +2,6 @@ app.controller('ViewProfileController',function(BlogService,UserService,FriendSe
 	$scope.user={}
 	$scope.blogs=[]
 	$scope.friend={}
-	$scope.x={}
 	if($location.path().substring(0,13)=='/viewProfile/'){
 		var id=$routeParams.id;
 		UserService.getUser(id).then(function(response){
@@ -13,7 +12,11 @@ app.controller('ViewProfileController',function(BlogService,UserService,FriendSe
 		BlogService.getAllBlogPostByUser(id).then(function(response){
 			$scope.blogs=response.data;
 			if($rootScope.currentUser.username!=$scope.user.username)
-				$scope.x.approved='!NA';
+				$scope.x=function(temp){
+				if(temp.approved=='NA'||temp.approved=='R')
+					return false;
+				return true;
+			}
 		},function(response){
 			alert("Internal Server Error!!!");
 		})
